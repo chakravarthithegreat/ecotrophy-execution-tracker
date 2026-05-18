@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ecotrophy-light text-ecotrophy-navy font-sans antialiased min-h-screen selection:bg-ecotrophy-lime selection:text-ecotrophy-navy;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(216, 100%, 95%, 1) 0, transparent 40%), 
+      radial-gradient(at 100% 0%, hsla(180, 100%, 92%, 1) 0, transparent 40%),
+      radial-gradient(at 100% 100%, hsla(80, 100%, 90%, 0.8) 0, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(216, 100%, 95%, 0.6) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-2xl border border-white/80 shadow-premium rounded-2xl transition-all duration-300;
+  }
+  
+  .glass-card:hover {
+    @apply bg-white/70 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)];
+  }
+  
+  .premium-card {
+    @apply bg-white/80 backdrop-blur-2xl border border-white shadow-premium rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] hover:-translate-y-1;
+  }
+
+  .sidebar-glass {
+    @apply bg-white/50 backdrop-blur-2xl border-r border-white/60 shadow-[4px_0_24px_-10px_rgba(0,0,0,0.05)];
+  }
+
+  .btn-primary {
+    @apply px-5 py-2.5 bg-ecotrophy-blue text-white rounded-2xl font-semibold transition-all duration-300 hover:shadow-punchy hover:bg-ecotrophy-blueDark hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply px-5 py-2.5 bg-white border border-slate-200 text-ecotrophy-navy rounded-2xl font-semibold transition-all duration-300 hover:border-ecotrophy-blue/30 hover:bg-slate-50 hover:shadow-md active:scale-[0.98] disabled:opacity-50;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/80 border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-ecotrophy-blue/15 focus:border-ecotrophy-blue focus:bg-white transition-all shadow-sm;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-300/60 rounded-full transition-colors;
+  }
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    @apply bg-slate-400/80;
+  }
+}
