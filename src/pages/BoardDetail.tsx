@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { boards } from '../data/mockData';
+import { boards, mockTasks } from '../data/mockData';
 import { MetricCard } from '../components/ui/MetricCard';
 import { 
   CheckSquare, 
@@ -13,30 +13,18 @@ import {
 import { TaskStatusBadge, PriorityBadge } from '../components/ui/Badges';
 import { Button } from '../components/ui/Button';
 import { TaskTimeline } from '../components/ui/TaskTimeline';
-import { firestoreService } from '../services/firestore';
 import type { Task, Board } from '../types';
 
 export const BoardDetail: React.FC = () => {
   const { boardId } = useParams<{ boardId: string }>();
   const navigate = useNavigate();
   const [view, setView] = useState<'table' | 'timeline'>('timeline');
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
   
-  // For V1, we still pull board info from mockData or fetch from Firestore if ID matches
   const board = boards.find(b => b.id === boardId) || ({} as Board);
-
-  useEffect(() => {
-    if (!boardId) return;
-
-    setLoading(true);
-    const unsubscribe = firestoreService.subscribeToTasks(boardId, (fetchedTasks) => {
-      setTasks(fetchedTasks);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [boardId]);
+  const tasks = useMemo<Task[]>(
+    () => mockTasks.filter(task => task.boardId === boardId),
+    [boardId],
+  );
 
   if (!boardId) return <div>Board ID missing</div>;
 
@@ -66,13 +54,6 @@ export const BoardDetail: React.FC = () => {
         </Button>
       </header>
 
-      {loading ? (
-        <div className="py-20 flex flex-col items-center justify-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-ecotrophy-blue"></div>
-          <p className="text-slate-400 font-medium">Syncing execution data...</p>
-        </div>
-      ) : (
-        <>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
           <MetricCard label="Total Tasks" value={tasks.length} icon={CheckSquare} />
           <MetricCard label="Done" value={tasks.filter(t => t.status === 'Done').length} icon={CheckCircle2} color="text-emerald-500" />
@@ -116,7 +97,7 @@ export const BoardDetail: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {tasks.length > 0 ? tasks.map(task => (
-                        <tr key={task.id} className="hover:bg-slate-50/80 transition-colors cursor-pointer group">
+                        <tr key={task.id} className="hover:bg-slate-50/80 transition-colors cursor-pointer group" onClick={() => navigate(`/tasks/${task.id}`)}>
                           <td className="px-6 py-4">
                             <div className="flex flex-col">
                               <span className="font-semibold text-ecotrophy-navy group-hover:text-ecotrophy-blue transition-colors">
@@ -153,8 +134,6 @@ export const BoardDetail: React.FC = () => {
               </div>
             )}
           </section>
-        </>
-      )}
     </div>
   );
 };

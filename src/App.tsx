@@ -8,6 +8,8 @@ import { DailyReview } from './pages/DailyReview';
 import { Team } from './pages/Team';
 import { Settings } from './pages/Settings';
 import { Login } from './pages/Login';
+import { NewTask } from './pages/NewTask';
+import { TaskDetail } from './pages/TaskDetail';
 import { AppShell } from './components/layout/AppShell';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 
@@ -24,6 +26,8 @@ function App() {
             <Route path="/boards" element={<Boards />} />
             <Route path="/boards/:boardId" element={<BoardDetail />} />
             <Route path="/my-tasks" element={<MyTasks />} />
+            <Route path="/tasks/new" element={<NewTask />} />
+            <Route path="/tasks/:taskId" element={<TaskDetail />} />
             <Route path="/blockers" element={<Blockers />} />
             <Route path="/daily-review" element={<DailyReview />} />
             <Route path="/team" element={<Team />} />

@@ -1,54 +1,48 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
-  type User,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword, 
-  signOut,
-  GoogleAuthProvider,
-  signInWithPopup
-} from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig';
+import React, { useState } from 'react';
+import { currentUser } from '../data/mockData';
+import type { User } from '../types';
+import { AuthContext } from './auth';
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, pass: string) => Promise<void>;
-  signUp: (email: string, pass: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
-  logout: () => Promise<void>;
-}
+const STORAGE_KEY = 'ecotrophy.mockUser';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const getStoredUser = () => {
+  const storedUser = window.localStorage.getItem(STORAGE_KEY);
+  if (!storedUser) return null;
+
+  try {
+    return JSON.parse(storedUser) as User;
+  } catch {
+    window.localStorage.removeItem(STORAGE_KEY);
+    return null;
+  }
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const [user, setUser] = useState<User | null>(() => getStoredUser());
+  const loading = false;
 
   const login = async (email: string, pass: string) => {
-    await signInWithEmailAndPassword(auth, email, pass);
+    if (!email || pass.length < 6) {
+      throw new Error('Enter an email and a password with at least 6 characters.');
+    }
+
+    const mockUser = { ...currentUser, email };
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(mockUser));
+    setUser(mockUser);
   };
 
   const signUp = async (email: string, pass: string) => {
-    await createUserWithEmailAndPassword(auth, email, pass);
+    await login(email, pass);
   };
 
   const loginWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+    setUser(currentUser);
   };
 
   const logout = async () => {
-    await signOut(auth);
+    window.localStorage.removeItem(STORAGE_KEY);
+    setUser(null);
   };
 
   return (
@@ -56,12 +50,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {!loading && children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

@@ -11,7 +11,7 @@ import {
 import { mockTasks } from '../data/mockData';
 import { PriorityBadge, TaskStatusBadge } from '../components/ui/Badges';
 import { Button } from '../components/ui/Button';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 export const Dashboard: React.FC = () => {
   const { user } = useAuth();

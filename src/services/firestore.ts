@@ -68,7 +68,7 @@ export const firestoreService = {
 
   // Blockers
   async getBlockers() {
-    const q = query(collection(db, 'blockers'), where('status', '==', 'active'), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, 'blockers'), where('status', '==', 'Active'), orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Blocker));
   },

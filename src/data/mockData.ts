@@ -1,5 +1,8 @@
 import type { Board, Department, Task, Blocker, User } from '../types/index';
 
+const MOCK_CREATED_AT = '2026-05-19T09:00:00.000Z';
+const MOCK_UPDATED_AT = '2026-05-19T09:00:00.000Z';
+
 export const currentUser: User = {
   id: 'user-1',
   name: 'Founder',
@@ -45,8 +48,8 @@ export const mockTasks: Task[] = [
     priority: 'High',
     deadline: '2026-05-20',
     status: 'Doing',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: MOCK_CREATED_AT,
+    updatedAt: MOCK_UPDATED_AT,
     proofUrls: [],
   },
   {
@@ -60,8 +63,9 @@ export const mockTasks: Task[] = [
     priority: 'Medium',
     deadline: '2026-05-22',
     status: 'To Do',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    blocker: 'Awaiting final campaign budget approval.',
+    createdAt: MOCK_CREATED_AT,
+    updatedAt: MOCK_UPDATED_AT,
     proofUrls: [],
   },
   {
@@ -75,8 +79,8 @@ export const mockTasks: Task[] = [
     priority: 'High',
     deadline: '2026-05-18',
     status: 'Done',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: MOCK_CREATED_AT,
+    updatedAt: MOCK_UPDATED_AT,
     proofUrls: ['https://example.com/proof.png'],
   }
 ];
@@ -84,11 +88,11 @@ export const mockTasks: Task[] = [
 export const mockBlockers: Blocker[] = [
   {
     id: 'blocker-1',
-    taskId: 'task-4',
-    taskTitle: 'Inventory Audit',
-    description: 'Awaiting vendor confirmation for stock counts.',
+    taskId: 'task-2',
+    taskTitle: 'Finalize Marketing Budget',
+    description: 'Awaiting final campaign budget approval.',
     status: 'Active',
-    createdAt: new Date().toISOString(),
-    ownerName: 'Operations Lead',
+    createdAt: MOCK_CREATED_AT,
+    ownerName: 'Marketing Head',
   }
 ];

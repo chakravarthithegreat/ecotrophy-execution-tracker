@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Mail, Lock, AlertCircle, Zap } from 'lucide-react';
 
 export const Login: React.FC = () => {
@@ -24,17 +24,9 @@ export const Login: React.FC = () => {
         await login(email, password);
       }
       navigate('/dashboard');
-    } catch (err: any) {
+    } catch (err) {
       console.error('Auth error:', err);
-      if (err.code === 'auth/email-already-in-use') {
-        setError('This email is already registered. Please sign in.');
-      } else if (err.code === 'auth/weak-password') {
-        setError('Password should be at least 6 characters.');
-      } else if (err.code === 'auth/operation-not-allowed') {
-        setError('Email/Password sign-in is not enabled in Firebase Console.');
-      } else {
-        setError(err.message || (isSignUp ? 'Failed to create account.' : 'Invalid credentials. Please try again.'));
-      }
+      setError(err instanceof Error ? err.message : (isSignUp ? 'Failed to create account.' : 'Invalid credentials. Please try again.'));
     } finally {
       setIsSubmitting(false);
     }
@@ -46,9 +38,9 @@ export const Login: React.FC = () => {
     try {
       await loginWithGoogle();
       navigate('/dashboard');
-    } catch (err: any) {
+    } catch (err) {
       console.error('Google Auth error:', err);
-      setError(err.message || 'Failed to sign in with Google.');
+      setError(err instanceof Error ? err.message : 'Failed to sign in with Google.');
     } finally {
       setIsSubmitting(false);
     }

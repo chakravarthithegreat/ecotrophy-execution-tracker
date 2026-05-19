@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { mockTasks } from '../data/mockData';
 import { TaskStatusBadge, PriorityBadge } from '../components/ui/Badges';
 
 export const MyTasks: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-8">
@@ -24,7 +27,7 @@ export const MyTasks: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {mockTasks.map(task => (
-                <tr key={task.id} className="hover:bg-slate-50/80 transition-colors cursor-pointer group">
+                <tr key={task.id} onClick={() => navigate(`/tasks/${task.id}`)} className="hover:bg-slate-50/80 transition-colors cursor-pointer group">
                   <td className="px-6 py-4 font-semibold text-ecotrophy-navy group-hover:text-ecotrophy-blue transition-colors">
                     {task.title}
                   </td>

@@ -11,7 +11,7 @@ import {
   Circle
 } from 'lucide-react';
 import { departments } from '../../data/mockData';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 import { LogOut } from 'lucide-react';
 
 const navItems = [
